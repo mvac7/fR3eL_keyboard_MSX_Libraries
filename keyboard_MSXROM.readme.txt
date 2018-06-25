@@ -35,8 +35,8 @@ Index:
 --------------------------------------------------------------------------------
 1. Introduction:
 
-This project is an opensource library (object type), with basic functions for 
-reading the keyboard of MSX computers.
+This project is an Open Source library with basic functions for reading the 
+keyboard of MSX computers.
 
 It uses the functions from the MSX BIOS, so it is designed to create 
 applications in ROM format.
