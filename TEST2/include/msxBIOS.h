@@ -1,4 +1,4 @@
-// MSX 1 BIOS v1
+// MSX BIOS v1.2
 // definitions & descriptions by MSX Assembly Page
 // only includes descriptions. For details see the WEB document in:
 // http://map.grauw.nl/resources/msxbios.php
@@ -8,19 +8,21 @@
 
 
 
-// RST-and other routines
-#define CHKRAM  0x0000 // Check RAM and sets slot for command area.
-#define SYNCHR  0x0008 // Checks if then current character pointed by HL is one desired.
+// use RST assembler mnemonic to call
+#define CHKRAM  0x00 // RST 0x00 > Check RAM and sets slot for command area.
+#define SYNCHR  0x08 // RST	0x08 > Checks if then current character pointed by HL is one desired.
+#define CHRGTR  0x10 // RST	0x10 > Gets the next character (or token) of the Basic-text
+#define OUTDO   0x18 // RST	0x18 > Output to current outputchannel (printer, diskfile, etc.)
+#define DCOMPR  0x20 // RST	0x20 > Compares HL with DE
+#define GETYPR  0x28 // RST	0x28 > Returns Type of DAC
+#define CALLF   0x30 // RST	0x30 > Executes an interslot call
+#define KEYINT  0x38 // RST	0x38 > Executes the timer interrupt process routine
+
+// use CALL assembler mnemonic
 #define RDSLT   0x000C // Reads the value of an address in another slot
-#define CHRGTR  0x0010 // Gets the next character (or token) of the Basic-text
-#define WRSLT   0x0014 // Writes a value to an address in another slot.
-#define OUTDO   0x0018 // Output to current outputchannel (printer, diskfile, etc.)
-#define CALSLT  0x001C // Executes inter-slot call.
-#define DCOMPR  0x0020 // Compares HL with DE
+#define WRSLT   0x0014 // Writes a value to an address in another slot
+#define CALSLT  0x001C // Executes inter-slot call
 #define ENASLT  0x0024 // Switches indicated slot at indicated page on perpetual
-#define GETYPR  0x0028 // Returns Type of DAC
-#define CALLF   0x0030 // Executes an interslot call
-#define KEYINT  0x0038 // Executes the timer interrupt process routine
 
 // Initialization-routines
 #define INITIO  0x003B // Initialises the device
@@ -75,7 +77,7 @@
 #define ISCNTC  0x00BA // Tests status of SHIFT-STOP 
 #define CKCNTC  0x00BD // Same as ISCNTC. used in Basic
 #define BEEP    0x00C0 // generates beep
-#define BCLS     0x00C3 // Clears the screen
+#define BCLS    0x00C3 // Clears the screen
 #define POSIT   0x00C6 // Places the cursor at the specified location
 #define FNKSB   0x00C9 /* Tests whether the function key display is active (FNKFLG)
                           If so, displays them, otherwise erase them */
@@ -102,7 +104,8 @@
 #define LFTQ    0x00F6 // Gives number of bytes in queue
 #define PUTQ    0x00F9 // Put byte in queue
 
-// Graphic routines                      
+// Graphic routines
+//More info (MSX Assembly Page): http://map.grauw.nl/resources/msxbios.php                      
 #define RIGHTC  0x00FC // Shifts screenpixel to the right
 #define LEFTC   0x00FF // Shifts screenpixel to the left
 #define UPC     0x0102 // Shifts screenpixel up
@@ -121,6 +124,16 @@
 #define PNTINI  0x0129 // Initalises the PAINT instruction
 #define SCANR   0x012C // Scans screenpixels to the right
 #define SCANL   0x012F // Scans screenpixels to the left
+
+// Graphic routines MSX2 
+//More info (MSX Assembly Page): http://map.grauw.nl/resources/msxbios.php#msx2bios
+#define CHKNEW  0x0165 //Tests screen mode > C-flag set if screenmode = 5, 6, 7 or 8
+#define BIGFIL  0x016B //fill VRAM with value (total VRAM can be reached) HL address, BC length, A data
+#define NSETRD  0x016E //Enable VDP to read.(with full 16 bits VRAM-address)
+#define NSTWRT  0x0171 //Enable VDP to write.(with full 16 bits VRAM-address) 
+#define NRDVRM  0x0174 //Reads VRAM like in RDVRM.(with full 16 bits VRAM-address)
+#define NWRVRM  0x0177 //Writes to VRAM like in WRTVRM.(with full 16 bits VRAM-address)
+
                      
 // Misc routines
 #define CHGCAP  0x0132 // Alternates the CAP lamp status

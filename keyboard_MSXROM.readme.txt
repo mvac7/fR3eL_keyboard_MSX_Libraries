@@ -8,7 +8,7 @@ Programming language: C
 WEB: 
 mail: mvac7303b@gmail.com
 
-Doc version: 1.0 
+Doc version: 1.1 (18/06/2019) 
 
 
 History of versions:
@@ -16,7 +16,8 @@ History of versions:
 
 
 Document changes:
-- 1.0 (25/6/2018) Initial version.
+- v1.1 (18/06/2019) Added Bit definitions (from header)  
+- v1.0 (25/06/2018) Initial version.
 
 
 --------------------------------------------------------------------------------
@@ -25,12 +26,14 @@ Index:
 1 Introduction
 2 Acknowledgments.
 3 Requirements
-4 Functions
-  4.1 KillBuffer
-  4.2 INKEY
-  4.3 GetKeyMatrix(line)
-5 Keyboard Matrix
-  5.1 International                       
+4 Constants
+  4.1 Bit values
+5 Functions
+  5.1 KillBuffer
+  5.2 INKEY
+  5.3 GetKeyMatrix(line)
+6 Keyboard Matrix
+  6.1 International                       
 
 
 
@@ -85,11 +88,27 @@ Includes an application for test and learning purposes.
 
 
 --------------------------------------------------------------------------------
-4 Functions
+4 Constants
+
+4.1 Bit values
+
+You can use it to check the key pressed with the GetKeyMatrix function.
+  
+* Bit0 = 1
+* Bit1 = 2
+* Bit2 = 4
+* Bit3 = 8
+* Bit4 = 16
+* Bit5 = 32
+* Bit6 = 64
+* Bit7 = 128
+
+--------------------------------------------------------------------------------
+5 Functions
 
 
 ================================================================================
-4.1 KillBuffer
+5.1 KillBuffer
 
  Function : Clear keyboard buffer
  Input    : -
@@ -101,20 +120,20 @@ Includes an application for test and learning purposes.
 
 
 ================================================================================
-4.2 INKEY 
+5.2 INKEY 
 
  Function : One character input (waiting) and return its code.
  Input    : -
  Output   : [char] key code
  Examples :              
 
-            char bytevalue;
-            bytevalue = INKEY();
-            if (bytevalue==13) pressReturnKey();
+            char byteValue;
+            byteValue = INKEY();
+            if (byteValue==13) pressReturnKey();
 
             
 ================================================================================
-4.3 GetKeyMatrix(line)
+5.3 GetKeyMatrix(line)
 
  Function : Returns the value of the specified line from the keyboard matrix.
             Each line provides the status of 8 keys.
@@ -124,19 +143,20 @@ Includes an application for test and learning purposes.
  Output   : [char] state of the keys. 1 = not pressed; 0 = pressed
  Examples : 
  
-            char pressKeys;
-            pressKeys = GetKeyMatrix(7); 
-            if ((pressKeys|0b11111011)==0b11111011) exit(); //ESC Key
+            char keyPressed;
+            keyPressed = GetKeyMatrix(7); 
+            if (!(keyPressed & Bit2)) exit(); //ESC Key
             
                         
 --------------------------------------------------------------------------------
-5 Keyboard Matrix
+6 Keyboard Matrix
 
   Info by MSX Assembly Page
   http://map.grauw.nl/articles/keymatrix.php
 
 
-5.1 International
+
+6.1 International
   
 bit  7     6     5     4     3     2     1     0
 ----------------------------------------------------

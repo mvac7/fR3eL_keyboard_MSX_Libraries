@@ -15,8 +15,6 @@
      
 ============================================================================= */
 #include "../include/keyboard.h"
-
-#include "../include/msxsystemvars.h"
 #include "../include/msxBIOS.h"
 
 
@@ -46,7 +44,8 @@ __endasm;
    Input    : -
    Output   : [char] key code
 ============================================================================= */
-char INKEY(){
+char INKEY()
+{
 __asm   
   
    call CHGET

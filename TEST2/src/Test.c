@@ -1,7 +1,7 @@
 /* =============================================================================
    SDCC Keyboard MSXROM Lib Test 2 (GetKeyMatrix)
-   Version: 1.1
-   Date: 24 June 2018
+   Version: 1.2
+   Date: 18 June 2019
    Author: mvac7/303bcn
    Architecture: MSX
    Format: C Object (SDCC .rel)
@@ -13,13 +13,14 @@
      Test the GetKeyMatrix function of the MSXROM Keyboard library.
      
    History of versions:
-     - v1.1 (24/06/2018)<
-     - v1.0 (6/02/2016)
+     - v1.2 (18/06/2019)<current version> improved pulsation control
+     - v1.1 (24/06/2018)
+     - v1.0 (06/02/2016)
      
 ============================================================================= */
 
 #include "../include/newTypes.h"
-#include "../include/msxsystemvars.h"
+#include "../include/msxSystemVariables.h"
 #include "../include/msxBIOS.h"
 
 #include "../include/memory.h"
@@ -44,7 +45,7 @@ uint GetVAddressByPosition(char column, char line);
 
 // constants  ------------------------------------------------------------------
 const char text01[] = "Test2 SDCC Keyboard MSXROM Lib";
-const char text02[] = "v1.1 (24/06/2018)";
+const char text02[] = "v1.2 (18/06/2019)";
 const char text03[] = "Test GetKeyMatrix()";
 
 
@@ -140,7 +141,7 @@ void main(void)
 void test()
 {
   byte val;
-  byte pressKey;
+  byte keyPressed;
   byte B;
   uint i;
   uint offset;
@@ -170,22 +171,22 @@ void test()
 
     for(B=0;B<9;B++)
     {
-      pressKey = GetKeyMatrix(B);
+      keyPressed = GetKeyMatrix(B);
       
-      if (pressKey==255)
+      if (keyPressed==255)
       {
         //no se han pulsado teclas de esta linea 
         offset = 244+(B*80);
         CopyToVRAM((uint) keyb_map + offset,BASE0 + offset,31);
       }else{
-        if ((pressKey|0b11111110)==0b11111110) printKey(7,B);
-        if ((pressKey|0b11111101)==0b11111101) printKey(6,B);
-        if ((pressKey|0b11111011)==0b11111011) printKey(5,B);
-        if ((pressKey|0b11110111)==0b11110111) printKey(4,B);
-        if ((pressKey|0b11101111)==0b11101111) printKey(3,B);
-        if ((pressKey|0b11011111)==0b11011111) printKey(2,B);
-        if ((pressKey|0b10111111)==0b10111111) printKey(1,B);
-        if ((pressKey|0b01111111)==0b01111111) printKey(0,B); 
+        if (!(keyPressed&Bit0)) printKey(7,B); 
+        if (!(keyPressed&Bit1)) printKey(6,B);
+        if (!(keyPressed&Bit2)) printKey(5,B);
+        if (!(keyPressed&Bit3)) printKey(4,B);
+        if (!(keyPressed&Bit4)) printKey(3,B);
+        if (!(keyPressed&Bit5)) printKey(2,B);
+        if (!(keyPressed&Bit6)) printKey(1,B);
+        if (!(keyPressed&Bit7)) printKey(0,B); 
       }
     
     } //END For

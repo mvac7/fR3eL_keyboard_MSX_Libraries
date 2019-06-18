@@ -19,7 +19,7 @@
 ============================================================================= */
 
 #include "../include/newTypes.h"
-#include "../include/msxsystemvars.h"
+#include "../include/msxSystemVariables.h"
 #include "../include/msxBIOS.h"
 
 #include "../include/keyboard.h"
