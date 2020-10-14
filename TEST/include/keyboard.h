@@ -2,16 +2,14 @@
    SDCC Keyboard Functions Library (object type)
    Version: 1.0
    Date: 7 March 2016
-   Author: mvac7/303bcn
+   Author: mvac7 
    Architecture: MSX
-   Format: object (.rel)
    Programming language: C
-   WEB: 
+   Format: C object (.rel)   
    mail: mvac7303b@gmail.com
 
    Description:
-     Functions for reading the keyboard of MSX computers.
-     
+     Functions for reading the keyboard of MSX computers.     
 ============================================================================= */
 
 #ifndef __KEYBOARD_H__
@@ -60,10 +58,10 @@ char INKEY();
               Each line provides the status of 8 keys.
               To know which keys correspond, you will need documentation that 
               includes a keyboard table.
-   Input    : [char] line 
+   Input    : [char] row 
    Output   : [char] state of the keys. 1 = not pressed; 0 = pressed
 ============================================================================= */
-char GetKeyMatrix(char line);
+char GetKeyMatrix(char row);
 
 
 

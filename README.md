@@ -1,4 +1,4 @@
-# SDCC Keyboard MSX ROM Functions Library (object type)
+# SDCC Keyboard MSX ROM Functions Library
 
 Author: mvac7
 
@@ -61,7 +61,7 @@ Thanks for Info & help, to:
 
 * void KillBuffer() - Clear keyboard buffer.
 * char INKEY() - One character input (waiting) and return its code.
-* char GetKeyMatrix(line) - Returns the value of the specified line from the keyboard matrix.
+* char GetKeyMatrix(row) - Returns the value of the specified line from the keyboard matrix.
 
 
 
@@ -159,7 +159,7 @@ void main(void)
   Row8pressed=false;
 
   
-  while(isOut==0)
+  while(1)
   {
     HALT;
     

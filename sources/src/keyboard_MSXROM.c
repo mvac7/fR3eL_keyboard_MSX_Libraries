@@ -1,18 +1,14 @@
 /* =============================================================================
-   SDCC Keyboard MSX ROM Functions Library (object type)
-   Version: 1.0
-   Date: 7 March 2016
-   Author: mvac7/303bcn
+   SDCC Keyboard MSX ROM Functions Library
+   Version: 1.0 (7 March 2016)
+   Author: mvac7
    Architecture: MSX
-   Format: C Object (SDCC .rel)
    Programming language: C
-   WEB: 
+   Format: C object (SDCC .rel) 
    mail: mvac7303b@gmail.com
 
    Description:
      Functions for reading the keyboard of MSX computers.
-     
-     
 ============================================================================= */
 #include "../include/keyboard.h"
 #include "../include/msxBIOS.h"
@@ -22,15 +18,16 @@
 /* =============================================================================
    KillBuffer
  
-  Function : Clear keyboard buffer
-  Input    : -
-  Output   : -
+   Function : Clear keyboard buffer
+   Input    : -
+   Output   : -
 ============================================================================= */
-void KillBuffer()
+void KillBuffer() __naked
 {
 __asm   
   
   call KILBUF
+  ret
    
 __endasm;
 }
@@ -44,13 +41,13 @@ __endasm;
    Input    : -
    Output   : [char] key code
 ============================================================================= */
-char INKEY()
+char INKEY() __naked
 {
 __asm   
   
-   call CHGET
-   
-   ld   L,A
+   call CHGET   
+   ld   L,A   
+   ret
    
 __endasm;
 }
@@ -67,7 +64,7 @@ __endasm;
    Input    : [char] line 
    Output   : [char] state of the keys. 1 = not pressed; 0 = pressed
 ============================================================================= */
-char GetKeyMatrix(char line)
+char GetKeyMatrix(char line) __naked
 {
 line;
 __asm
@@ -82,5 +79,6 @@ __asm
   ld   L,A
   
   pop  IX
+  ret
 __endasm;
 }
