@@ -1,77 +1,75 @@
-# SDCC Keyboard MSX ROM Functions Library
+# Keyboard MSX ROM SDCC Library (fR3eL Project)
 
-Author: mvac7
-
+```
+Author: mvac7 [mvac7303b@gmail.com]
 Architecture: MSX
-
-Programming language: C
-
-Format: .rel (SDCC object file)
- 
-mail: mvac7303b@gmail.com
+Format: C Object (SDCC .rel)
+Programming language: C and Z80 assembler
+```
 
 
 
+## Description
 
-## 1. Introduction
+This project is an Open Source library with basic functions for reading the keyboard of MSX computers.
 
-This project is an Open Source library with basic functions for reading the 
-keyboard of MSX computers.
-
-It uses the functions from the MSX BIOS, so it is designed to create 
-applications in ROM format.
+It uses the functions from the MSX BIOS, so it is designed to create applications in ROM format.
   
 Use them for developing MSX applications using Small Device C Compiler (SDCC).
 
 Includes an application for test and learning purposes.
 
+This library is part of the [MSX fR3eL Project](https://github.com/mvac7/SDCC_MSX_fR3eL).
+
+Enjoy it!
 
 
-## 2. Acknowledgments
+
+## Requirements
+
+* Small Device C Compiler (SDCC) v3.9 http://sdcc.sourceforge.net/
+* Hex2bin v2.5 http://hex2bin.sourceforge.net/ 
+
+
+
+## Acknowledgments
   
-Thanks for Info & help, to:
+I want to give a special thanks to all those who freely share their knowledge with the MSX developer community.
 
-* Avelino Herrera > http://msx.atlantes.org/index_es.html
-* Nerlaska > http://albertodehoyonebot.blogspot.com.es
-* Fubu > http://www.gamerachan.org/fubu/
-* Marq/Lieves!Tuore > http://www.kameli.net/lt/
-* Sapphire/Z80ST > http://z80st.auic.es/
-* Pentacour > http://pentacour.com/
-* JamQue/TPM > http://www.thepetsmode.com/
-* Andrear > http://andrear.altervista.org/home/msxsoftware.php
-* Konamiman > https://www.konamiman.com
-* MSX Assembly Page > http://map.grauw.nl/resources/msxbios.php
-* Portar MSX Tech Doc > http://nocash.emubase.de/portar.htm
-* MSX Resource Center > http://www.msx.org/
-* Karoshi MSX Community > http://karoshi.auic.es/
-* BlueMSX >> http://www.bluemsx.com/
-* OpenMSX >> http://openmsx.sourceforge.net/
-* Meisei  >> ?
-
-
-
-## 3. Requirements
-
-* Small Device C Compiler (SDCC) v3.6 http://sdcc.sourceforge.net/
-* Hex2bin v2.2 http://hex2bin.sourceforge.net/ 
+* Avelino Herrera > [WEB](http://msx.atlantes.org/index_es.html)
+* Nerlaska > [Blog](http://albertodehoyonebot.blogspot.com.es)
+* Marq/Lieves!Tuore > [Marq](http://www.kameli.net/marq/) [Lieves!Tuore](http://www.kameli.net/lt/)
+* [Fubukimaru](https://github.com/Fubukimaru) > [Blog](http://www.gamerachan.org/fubu/)
+* Andrear > [Blog](http://andrear.altervista.org/home/msxsoftware.php)
+* Ramones > [MSXblog](https://www.msxblog.es/tutoriales-de-programacion-en-ensamblador-ramones/) - [MSXbanzai](http://msxbanzai.tni.nl/dev/faq.html)
+* Sapphire/Z80ST > [WEB](http://z80st.auic.es/)
+* Fernando García > [youTube](https://www.youtube.com/user/bitvision)
+* Eric Boez > [gitHub](https://github.com/ericb59)
+* MSX Assembly Page > [WEB](http://map.grauw.nl/resources/msxbios.php)
+* Portar MSX Tech Doc > [WEB](http://nocash.emubase.de/portar.htm)
+* MSX Resource Center > [WEB](http://www.msx.org/)
+* Karoshi MSX Community (RIP 2007-2020)
+* BlueMSX emulator >> [WEB](http://www.bluemsx.com/)
+* OpenMSX emulator >> [WEB](http://openmsx.sourceforge.net/)
+* Meisei emulator >> ?
 
 
 
-## 4. Functions
+## Functions
 
-* void KillBuffer() - Clear keyboard buffer.
-* char INKEY() - One character input (waiting) and return its code.
-* char GetKeyMatrix(row) - Returns the value of the specified line from the keyboard matrix.
+* void **KillBuffer**() - Clear keyboard buffer.
+* char **INKEY**() - One character input (waiting) and return its code.
+* char **GetKeyMatrix**(row) - Returns the value of the specified line from the keyboard matrix.
 
 
 
-## 5. Keyboard Matrix
+## Keyboard Matrix
 
   Info by MSX Assembly Page 
   http://map.grauw.nl/articles/keymatrix.php
   
   
-### 5.1 International
+### International
 ```  
 Row  7      6      5      4      3      2      1      0    <-- bit
 -----------------------------------------------------------
@@ -87,7 +85,7 @@ Row  7      6      5      4      3      2      1      0    <-- bit
 ```
 
 
-### 5.2 Numeric pad
+### Numeric pad
 ```
 Row  7      6      5      4      3      2      1      0    <-- bit
 ----------------------------------------------------------- 
@@ -96,15 +94,13 @@ Row  7      6      5      4      3      2      1      0    <-- bit
 ```
 
  
-## 6. A bit of code
+## A bit of code
  
 This code contains the basis for controlling any key with pressure control.
 
-You can add it to your program and adapt it with the keyboard rows and keys that 
-your program uses.
+You can add it to your program and adapt it with the keyboard rows and keys that your program uses.
 
-Uncomment the lines of the keys you need and add the code to be executed, after 
-setting the pressure control variable to true.
+Uncomment the lines of the keys you need and add the code to be executed, after setting the pressure control variable to true.
 
 Example:
 ```

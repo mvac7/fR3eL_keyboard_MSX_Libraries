@@ -2,7 +2,7 @@
    SDCC Keyboard MSXROM Lib Test 1 (INKEY)
    Version: 1.1
    Date: 24 June 2018
-   Author: mvac7/303bcn
+   Author: mvac7
    Architecture: MSX
    Format: C Object (SDCC .rel)
    Programming language: C

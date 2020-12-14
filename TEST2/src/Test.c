@@ -2,7 +2,7 @@
    SDCC Keyboard MSXROM Lib Test 2 (GetKeyMatrix)
    Version: 1.2
    Date: 18 June 2019
-   Author: mvac7/303bcn
+   Author: mvac7
    Architecture: MSX
    Format: C Object (SDCC .rel)
    Programming language: C
