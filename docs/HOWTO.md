@@ -45,8 +45,8 @@ Enjoy it!
 
 ## 2 Requirements
 
-* Small Device C Compiler (SDCC) v3.9 http://sdcc.sourceforge.net/
-* Hex2bin v2.5 http://hex2bin.sourceforge.net/ 
+- [Small Device C Compiler (SDCC) v4.1](http://sdcc.sourceforge.net/)
+- [Hex2bin v2.5](http://hex2bin.sourceforge.net/)
 
 <br/>
 
