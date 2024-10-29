@@ -1,7 +1,6 @@
 # Keyboard MSX ROM SDCC Library (fR3eL Project)
 
 ```
-Author: mvac7
 Architecture: MSX
 Format: C Object (SDCC .rel)
 Programming language: C and Z80 assembler
@@ -32,35 +31,25 @@ Enjoy it!
 
 ---
 
-## Requirements
+## History of versions:
 
-- [Small Device C Compiler (SDCC) v4.1](http://sdcc.sourceforge.net/)
-- [Hex2bin v2.5](http://hex2bin.sourceforge.net/)
+- v1.1 (30/11/2023) update to SDCC (4.1.12) Z80 calling conventions
+- v1.0 (7/3/2016) first version
 
 <br/>
 
 ---
 
-## Acknowledgments
-  
-I want to give a special thanks to all those who freely share their knowledge with the MSX developer community.
+## Requirements
 
-- Avelino Herrera > [`WEB`](http://msx.avelinoherrera.com/index_es.html)
-- Nerlaska > [`Blog`](http://albertodehoyonebot.blogspot.com.es)
-- Marq > [`Marq`](http://www.kameli.net/marq/)
-- MSXKun/Paxanga soft > [`WEB`](http://paxangasoft.retroinvaders.com/)
-- Fubukimaru [`gitHub`](https://github.com/Fubukimaru)
-- Andrear > [`Blog`](http://andrear.altervista.org/home/msxsoftware.php)
-- Sapphire/Z80ST > [`WEB`](http://z80st.auic.es/)
-- Fernando García > [`Video Tutorial`](http://www.z80st.es/cursos/bitvision-assembler)
-- Ramones > [`MSXblog`](https://www.msxblog.es/tutoriales-de-programacion-en-ensamblador-ramones/) - [`MSXbanzai`](http://msxbanzai.tni.nl/dev/faq.html)
-- Eric Boez > [`gitHub`](https://github.com/ericb59)
-- MSX Assembly Page > [`WEB`](http://map.grauw.nl/resources/msxbios.php)
-- Portar MSX Tech Doc > [`WEB`](https://problemkaputt.de/portar.htm)
-- MSX Resource Center > [`WEB`](http://www.msx.org/)
-- Karoshi MSX Community > [`WEB`](http://karoshi.auic.es/)
-- BlueMSX emulator >> [`WEB`](http://www.bluemsx.com/)
-- OpenMSX emulator >> [`WEB`](http://openmsx.sourceforge.net/)
-- [`WebMSX`](https://webmsx.org/) emulator by Paulo A. Peccin >> [`gitHub`](https://github.com/ppeccin/webmsx)
-- fMSX emulator by Marat Fayzullin [`WEB`](https://fms.komkon.org/fMSX/)
-- Meisei emulator by Hap >> `?`
+- [Small Device C Compiler (SDCC) v4.3](http://sdcc.sourceforge.net/)
+- [Hex2bin v2.5](http://hex2bin.sourceforge.net/)
+
+
+## Functions
+
+| Function | Description |
+| :---     | :---        |
+| **KillBuffer**() | Clear keyboard buffer |
+| **INKEY**() | Waits for a key press and returns its value |
+| **GetKeyMatrix**(row) | Returns the value of the specified line from the keyboard matrix |
