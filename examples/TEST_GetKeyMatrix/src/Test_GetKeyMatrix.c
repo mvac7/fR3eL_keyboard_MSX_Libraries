@@ -1,16 +1,17 @@
 /* =============================================================================
-   Test GetKeyMatrix from Keyboard MSX-ROM Library (fR3eL Project)
-   Version: 1.3 (30/11/2023)
-   Author: mvac7/303bcn [mvac7303b@gmail.com]
+   Test GetKeyMatrix
+   Version: 1.4 (1/11/2024)
+   Author: mvac7/303bcn
    Architecture: MSX
    Format: C object (SDCC .rel)
    Programming language: C and Z80 assembler
-   Compiler: SDCC 4.1.12 or newer 
+   Compiler: SDCC 4.3 or newer 
 
    Description:
-     Test the GetKeyMatrix function of the MSXROM Keyboard library.
+     Test the GetKeyMatrix function of the SDCC Keyboard MSX ROM library.
      
    History of versions:
+   - v1.4 ( 1/11/2024) Improved multi-key press handling and some improvements
    - v1.3 (30/11/2023) update to SDCC (4.3) and Keyboard MSX-ROM v1.1 library 
    - v1.2 (18/06/2019) improved pulsation control
    - v1.1 (24/06/2018)
@@ -29,9 +30,13 @@
 #define  HALT __asm halt __endasm   //Z80 instruction > wait for the next interrupt
 
 
-// VRAM address tables screen 0 TXT40
-#define BASE0 0x0000 // base 0 name table
-#define BASE2 0x0800 // base 2 character pattern table
+// VRAM address tables T1 Screen 0 TXT40
+#define BASE0 0x0000 // Name Table
+#define BASE2 0x0800 // Pattern Table
+
+//VDP Ports
+#define VDPVRAM   0x98  //VRAM Data (Read/Write)
+#define VDPSTATUS 0x99  //VDP Status Registers
 
 
 
@@ -41,14 +46,18 @@ void test(void);
 void printKey(char column, char line);
 
 void PRINT(char column, char line, char* text);
-uint GetVAddressByPosition(char column, char line);
 
 char PEEK(uint address);
+
+void printKey(char column, char line);
+void clearKey(char column, char line);
 
 void SCREEN0(void);
 void VPOKE(char value, unsigned int vaddr);
 char VPEEK(unsigned int vaddr);
-void CopyToVRAM(unsigned int addr, unsigned int vaddr, unsigned int length);
+void SetVRAMtoWRITE(unsigned int vaddr);
+void FastVPOKE(char value);
+
 
 
 
@@ -133,9 +142,7 @@ const unsigned char keyb_map[]={
 
 //
 void main(void)
-{
-//  COLOR(LIGHT_GREEN,DARK_GREEN,DARK_GREEN);    
-  SCREEN0();
+{  
     
   test();
 
@@ -153,20 +160,24 @@ void test(void)
   char row;
   uint i;
   uint offset;
-  uint vaddr = BASE2 + (32*8);
+  uint vaddr;
  
-  CopyToVRAM((uint) keyb_map,BASE0,0x3c0);
+  SCREEN0();
+  
+  SetVRAMtoWRITE(BASE0);
+  for(i=0;i<0x3c0;i++){FastVPOKE(keyb_map[i]);}
   
   PRINT(0,0,text01);
   PRINT(0,1,text02);
   
   
-  // genera una copia de los caracteres en la posicion 128 en negativo
+  //generates a negative copy of the characters at position 128 of the pattern table
+  vaddr = BASE2 + (32*8);
   for (i=0;i<768;i++)
   {
-    val = ~ VPEEK(vaddr); //invierte el valor
-    VPOKE(val,vaddr+768); //lo copia en un tile superior
-    vaddr++;              // avanza a la siguiente posicion de la vram
+    val = ~ VPEEK(vaddr); //reads the value of pattern and inverts it
+    VPOKE(val,vaddr+768); //copy the value to 96 characters later
+    vaddr++;              //advance to the next position of the vram
   }
 
   
@@ -182,18 +193,20 @@ void test(void)
       
       if (keyPressed==255)
       {
-        //no se han pulsado teclas de esta linea 
+        //No keys have been pressed on this row 
         offset = 244+(row*80);
-        CopyToVRAM((uint) keyb_map + offset, BASE0 + offset, 31);
+		SetVRAMtoWRITE(BASE0 + offset);
+		for(i=0;i<32;i++){FastVPOKE(keyb_map[offset++]);}
+        
       }else{
-        if (!(keyPressed&Bit0)) printKey(7,row); 
-        if (!(keyPressed&Bit1)) printKey(6,row);
-        if (!(keyPressed&Bit2)) printKey(5,row);
-        if (!(keyPressed&Bit3)) printKey(4,row);
-        if (!(keyPressed&Bit4)) printKey(3,row);
-        if (!(keyPressed&Bit5)) printKey(2,row);
-        if (!(keyPressed&Bit6)) printKey(1,row);
-        if (!(keyPressed&Bit7)) printKey(0,row); 
+        if (!(keyPressed&Bit0)) printKey(7,row); else clearKey(7,row); 
+        if (!(keyPressed&Bit1)) printKey(6,row); else clearKey(6,row); 
+        if (!(keyPressed&Bit2)) printKey(5,row); else clearKey(5,row); 
+        if (!(keyPressed&Bit3)) printKey(4,row); else clearKey(4,row); 
+        if (!(keyPressed&Bit4)) printKey(3,row); else clearKey(3,row); 
+        if (!(keyPressed&Bit5)) printKey(2,row); else clearKey(2,row); 
+        if (!(keyPressed&Bit6)) printKey(1,row); else clearKey(1,row); 
+        if (!(keyPressed&Bit7)) printKey(0,row); else clearKey(0,row); 
       }
     
     } //END For
@@ -205,61 +218,49 @@ void test(void)
 
 
 /* -----------------------------------------------------------------------------
-
+   Displays the key pressed
 ----------------------------------------------------------------------------- */
 void printKey(char column, char line)
 { 
-  char tmpTile;
+  char B=3;
   uint vaddr;
-  uint addr;
   
-  vaddr = 244 + (column*4) +(line*80);
-  addr= (uint) keyb_map + vaddr;
+  vaddr = BASE0 + 244 + (column*4) +(line*80);
   
-  tmpTile = PEEK(addr++);
-  VPOKE(tmpTile+96,vaddr++);
-    
-  tmpTile = PEEK(addr++);
-  VPOKE(tmpTile+96,vaddr++);
-    
-  tmpTile = PEEK(addr);
-  VPOKE(tmpTile+96,vaddr);
+  SetVRAMtoWRITE(vaddr);
+  while(B--) FastVPOKE(keyb_map[vaddr++]+96);
+  
+}
 
+
+
+/* -----------------------------------------------------------------------------
+   Shows the key in unpressed state
+----------------------------------------------------------------------------- */
+void clearKey(char column, char line)
+{ 
+  char B=3;
+  uint vaddr;
+  
+  vaddr = BASE0 + 244 + (column*4) +(line*80);
+  
+  SetVRAMtoWRITE(vaddr);
+  while(B--) FastVPOKE(keyb_map[vaddr++]);
+ 
 }
 
 
 
 /* =============================================================================
- muestra un texto en la pantalla de varias lineas separadas 
- con el codigo de escape newline \n
- ejem: PRINT(0,10,"ARE YOU SURE\nYOU WANT TO\nDELETE SONG?");
+ Display a string to screen
 ============================================================================= */
 void PRINT(char column, char line, char* text)
 {
-  char character;
-  uint vaddr = GetVAddressByPosition(column, line);  
+  uint vaddr = BASE0 + (line*40)+column; //<------ BASE0 for screen 0; use BASE5 for screen 1 
+  
+  SetVRAMtoWRITE(vaddr);
+  while(*(text)) FastVPOKE(*(text++));
 
-  while(*(text))
-  {
-    character=*(text++);
-    VPOKE(character,vaddr++);
-  }
-}
-
-
-
-/* =============================================================================
- It provides the address of the video memory map tiles, from the screen position
- indicated.
- Proporciona la direccion de la memoria de video del mapa de tiles, a partir de
- la posicion de pantalla indicada.
- Inputs:
-   column (char) 0 - 39
-   line (char) 0 - 23
-============================================================================= */
-uint GetVAddressByPosition(char column, char line)
-{
-   return BASE0 + (line*40)+column; //<------ BASE0 for screen 0; use BASE5 for screen 1 
 }
 
 
@@ -337,28 +338,35 @@ __endasm;
 
 
 /* =============================================================================
- CopyToVRAM
- Description: Block transfer from memory to VRAM 
- Input      : [unsigned int] address of RAM
-              [unsigned int] address of VRAM
-              [unsigned int] blocklength
- Output     : - 
+ SetVRAMtoWRITE
+ Description: Enable VDP to write (Similar to BIOS SETWRT)
+ Input      : [char] VRAM address
+ Output     : -             
 ============================================================================= */
-void CopyToVRAM(unsigned int addr, unsigned int vaddr, unsigned int length)
+void SetVRAMtoWRITE(unsigned int vaddr) __naked
 {
-addr;	//HL
-vaddr;	//DE
-length;	//Stack
+vaddr;	//HL
 __asm
-  push IX
-  ld   IX,#0
-  add  IX,SP 
 
-  ld   C,4(IX) ;length
-  ld   B,5(IX)
-  
-  call BIOS_LDIRVM
-  
-  pop  IX
+  jp BIOS_SETWRT
+
+__endasm;
+}   
+
+
+
+/*===============================================================================
+ FastVPOKE                                
+ Function :	Writes a value to the next video RAM position. 
+				Requires the VDP to be in write mode, either by previously 
+				using VPOKE or SetVRAMtoWRITE functions.
+ Input    : A - value
+===============================================================================*/
+void FastVPOKE(char value) __naked
+{
+value;	//A
+__asm
+  out  (VDPVRAM),A  
+  ret
 __endasm;
 }

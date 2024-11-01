@@ -45,6 +45,9 @@ Enjoy it!
 - [Small Device C Compiler (SDCC) v4.3](http://sdcc.sourceforge.net/)
 - [Hex2bin v2.5](http://hex2bin.sourceforge.net/)
 
+<br/>
+
+---
 
 ## Functions
 
@@ -53,3 +56,31 @@ Enjoy it!
 | **KillBuffer**() | Clear keyboard buffer |
 | **INKEY**() | Waits for a key press and returns its value |
 | **GetKeyMatrix**(row) | Returns the value of the specified line from the keyboard matrix |
+
+<br/>
+
+---
+
+## Code Examples
+
+In the git project [`examples/`](../examples/), you can find the source code of applications for testing and learning purposes.
+
+<br/>
+
+### TEST_GetKeyMatrix
+
+Test the GetKeyMatrix function.
+
+[`examples/testLib`](examples/TEST_GetKeyMatrix)
+
+![Example screenshot](docs/pics/TEST_GetKeyMatrix_0000.png) 
+
+<br/>
+
+### TEST_INKEY
+
+Test the INKEY function.
+
+[`examples/test80c`](examples/TEST_INKEY)
+
+![Example screenshot](docs/pics/TEST_INKEY_0000.png) 

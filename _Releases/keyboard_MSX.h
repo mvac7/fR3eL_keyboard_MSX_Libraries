@@ -1,8 +1,8 @@
 /* =============================================================================
-	Keyboard MSX Library (fR3eL Project)
+   Keyboard MSX Library (fR3eL Project)
 
-	Description:
-	 Functions for reading the keyboard of MSX computers.     
+   Description:
+     Functions for reading the keyboard of MSX computers.     
 ============================================================================= */
 
 #ifndef __KEYBOARD_H__

@@ -3,7 +3,7 @@ REM MAKEFILE for 8/16K ROMs using SDCC compiler
 REM CFILENAME = Source name without extension
 REM ROMFILENAME = ROM file name without extension
 REM ROMSIZE = 2000 for 8KBytes ROM or 4000 for 16KBytes ROM
-SET CFILENAME=TEST_KeyMatrix
+SET CFILENAME=Test_GetKeyMatrix
 SET ROMFILENAME=TESTKEYS
 SET CODELOC=0x4020
 SET ROMSIZE=2000

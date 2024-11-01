@@ -36,7 +36,7 @@ void test(void);
 
 // constants  ------------------------------------------------------------------
 const char text01[] = "Test Keyboard MSXROM Lib";
-//const char text02[] = "v1.2 (30/11/2023)";
+const char text02[] = "Test INKEY()";
 
 
 // global variable definition --------------------------------------------------
@@ -64,12 +64,8 @@ void test(void)
   char bytevalue;
   
   LOCATE(0,0);
-  PRINT(text01);
-//  LOCATE(0,1);
-//  PRINT(text02);
-  
-  LOCATE(0,4);
-  PRINT("Test INKEY");
+  PrintLN(text01);
+  PRINT(text02);
   
   LOCATE(1,7);
   PRINT("Press a key:");
