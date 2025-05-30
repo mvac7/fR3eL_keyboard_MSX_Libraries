@@ -19,7 +19,6 @@
         - [6.1.2 Numeric pad](#612-Numeric-pad)
 - [7 References](#7-References)
 
-
 <br/>
 
 ---
@@ -28,13 +27,16 @@
 
 Library with basic functions for reading the keyboard of MSX computers.
 
-This library uses functions from the MSX BIOS, so it is designed to create applications in ROM format.
+In this project you will find two libraries for different environments:
+- **keyboard_MSXBIOS** Uses the MSX BIOS. It takes up very little memory. You can use it to develop applications in ROM format or programs that run from MSX BASIC environment.
+- **keyboard_MSXDOS** Uses the MSX BIOS functions via inter-slot call (CALSLT). You can use it to develop applications for the MSX-DOS environment.
+  
+These libraries are part of the [MSX fR3eL Project](https://github.com/mvac7/SDCC_MSX_fR3eL).
 
-Use them for developing MSX applications using Small Device C Compiler (SDCC).
+Use them for developing MSX applications using Small Device C Compiler [`SDCC`](http://sdcc.sourceforge.net/).
 
-This library is part of the [MSX fR3eL Project](https://github.com/mvac7/SDCC_MSX_fR3eL).
-
-Enjoy it!   
+This project is an Open Source. 
+You can add part or all of this code in your application development or include it in other libraries/engines.
 
 <br/>
 
@@ -42,7 +44,7 @@ Enjoy it!
 
 ## 2 Requirements
 
-- [Small Device C Compiler (SDCC) v4.3](http://sdcc.sourceforge.net/)
+- [Small Device C Compiler (SDCC) v4.4](http://sdcc.sourceforge.net/)
 - [Hex2bin v2.5](http://hex2bin.sourceforge.net/)
 
 <br/>
@@ -50,6 +52,8 @@ Enjoy it!
 ---
 
 ## 3 Definitions
+
+The library provides a number of definitions to help you improve the readability of your source code.
 
 ### 3.1 Bit values
 
@@ -66,6 +70,7 @@ Bit5  | 32
 Bit6  | 64
 Bit7  | 128
 
+<br/>
 
 #### Example:
 
@@ -81,7 +86,7 @@ Bit7  | 128
 ## 4 Functions
 
 
-#### 4.1 KillBuffer
+### 4.1 KillBuffer
 
 <table>
 <tr><th colspan=3 align="left">KillBuffer</th></tr>
@@ -89,11 +94,20 @@ Bit7  | 128
 <tr><th>Function</th><td colspan=2>KillBuffer()</td></tr>
 <tr><th>Input</th><td colspan=2>--</td></tr>
 <tr><th>Output</th><td colspan=2>--</td></tr>
-<tr><th>Example:</th><td colspan=2><pre>KillBuffer();</pre></td></tr>
 </table>
 
+<br/>
 
-#### 4.2 INKEY
+#### Example:
+
+```c
+	KillBuffer();
+	INKEY();
+```
+
+<br/>
+
+### 4.2 INKEY
 
 <table>
 <tr><th colspan=3 align="left">INKEY</th></tr>
@@ -101,23 +115,42 @@ Bit7  | 128
 <tr><th>Function</th><td colspan=2>INKEY()</td></tr>
 <tr><th>Input</th><td colspan=2>--</td></tr>
 <tr><th>Output</th><td>[char]</td><td>Key code</td></tr>
-<tr><th>Example:</th><td colspan=2><pre>char byteValue;<br/>byteValue = INKEY();<br/>if (byteValue==13) pressReturnKey();</pre></td></tr>
 </table>
 
+<br/>
 
-#### 4.3 GetKeyMatrix
+#### Example:
+
+```c
+	char byteValue;
+	byteValue = INKEY();
+	if (byteValue==13) pressReturnKey();
+```
+
+<br/>
+
+### 4.3 GetKeyMatrix
 
 <table>
 <tr><th colspan=3 align="left">GetKeyMatrix</th></tr>
-<tr><td colspan=3>Returns the value of the specified line from the keyboard matrix.<br/>
-Each line provides the status of 8 keys.<br/>
+<tr><td colspan=3>Returns the value of the specified row from the keyboard matrix.<br/>
+Each line provides the status of 8 keys (row).<br/>
 To know which keys correspond, you will need documentation that<br/> 
 includes a keyboard table.</td></tr>
 <tr><th>Function</th><td colspan=2>GetKeyMatrix(row)</td></tr>
 <tr><th>Input</th><td>[char]</td><td>Row</td></tr>
-<tr><th>Output</th><td>[char]</td><td>state of the keys. 1 = not pressed; 0 = pressed</td></tr>
-<tr><th>Example:</th><td colspan=2><pre>char keyPressed;<br/>keyPressed = GetKeyMatrix(7);<br/>if (!(keyPressed & Bit2)) Exit(); //ESC Key</pre></td></tr>
+<tr><th>Output</th><td>[char]</td><td>Keys row state (1=not pressed; 0=pressed)</td></tr>
 </table>
+
+<br/>
+
+#### Example:
+
+```c
+	char keyPressed;
+	keyPressed = GetKeyMatrix(7);
+	if (!(keyPressed & Bit2)) Exit(); //ESC Key
+```
 
 <br/>
 
@@ -131,18 +164,21 @@ You can add it to your program and adapt it with the keyboard rows and keys that
 
 Uncomment the lines of the keys you need and add the code to be executed, after setting the pressure control variable to true.
 
+<br/>
+
 #### Example:
 
 ```c
-  if (!(keyPressed&Bit5)) {Row6pressed=true;KonamisPause();}; // [F1]
+  if (!(keyPressed&Bit5)) {Row6pressed=true;KonamisPause();} // [F1]
   if (!(keyPressed&Bit6)) 
   {
      Row6pressed=true;
      score++;
      ShowValue(score);
-  }; // [F2]
+  } //[F2]
 ```
 
+<br/>
 
 #### The code:
 
@@ -188,12 +224,10 @@ void main(void)
   Row6pressed=false;
   Row7pressed=false;
   Row8pressed=false;
-
   
   while(1)
   {
     HALT;
-
 
     // Keyboard row 0
     keyPressed = GetKeyMatrix(0);
@@ -201,14 +235,14 @@ void main(void)
     {
       if(Row0pressed==false)
       {
-        //if (!(keyPressed&Bit0)) {Row0pressed=true;}; // [0]
-        //if (!(keyPressed&Bit1)) {Row0pressed=true;}; // [1] 
-        //if (!(keyPressed&Bit2)) {Row0pressed=true;}; // [2]
-        //if (!(keyPressed&Bit3)) {Row0pressed=true;}; // [3] 
-        //if (!(keyPressed&Bit4)) {Row0pressed=true;}; // [4]
-        //if (!(keyPressed&Bit5)) {Row0pressed=true;}; // [5]
-        //if (!(keyPressed&Bit6)) {Row0pressed=true;}; // [6]
-        //if (!(keyPressed&Bit7)) {Row0pressed=true;}; // [7]
+        //if (!(keyPressed&Bit0)) {Row0pressed=true;} //[0]
+        //if (!(keyPressed&Bit1)) {Row0pressed=true;} //[1] 
+        //if (!(keyPressed&Bit2)) {Row0pressed=true;} //[2]
+        //if (!(keyPressed&Bit3)) {Row0pressed=true;} //[3] 
+        //if (!(keyPressed&Bit4)) {Row0pressed=true;} //[4]
+        //if (!(keyPressed&Bit5)) {Row0pressed=true;} //[5]
+        //if (!(keyPressed&Bit6)) {Row0pressed=true;} //[6]
+        //if (!(keyPressed&Bit7)) {Row0pressed=true;} //[7]
       }      
     }else Row0pressed=false;
   
@@ -218,14 +252,14 @@ void main(void)
     {
       if(Row1pressed==false)
       {
-        //if (!(keyPressed&Bit0)) {Row1pressed=true;}; // [8]
-        //if (!(keyPressed&Bit1)) {Row1pressed=true;}; // [9] 
-        //if (!(keyPressed&Bit2)) {Row1pressed=true;}; // [-]
-        //if (!(keyPressed&Bit3)) {Row1pressed=true;}; // [=] 
-        //if (!(keyPressed&Bit4)) {Row1pressed=true;}; // [\]
-        //if (!(keyPressed&Bit5)) {Row1pressed=true;}; // [[]
-        //if (!(keyPressed&Bit6)) {Row1pressed=true;}; // []]
-        //if (!(keyPressed&Bit7)) {Row1pressed=true;}; // [;]
+        //if (!(keyPressed&Bit0)) {Row1pressed=true;} //[8]
+        //if (!(keyPressed&Bit1)) {Row1pressed=true;} //[9] 
+        //if (!(keyPressed&Bit2)) {Row1pressed=true;} //[-]
+        //if (!(keyPressed&Bit3)) {Row1pressed=true;} //[=] 
+        //if (!(keyPressed&Bit4)) {Row1pressed=true;} //[\]
+        //if (!(keyPressed&Bit5)) {Row1pressed=true;} //[[]
+        //if (!(keyPressed&Bit6)) {Row1pressed=true;} //[]]
+        //if (!(keyPressed&Bit7)) {Row1pressed=true;} //[;]
       }      
     }else Row1pressed=false;
     
@@ -236,14 +270,14 @@ void main(void)
     {
       if(Row2pressed==false)
       {
-        //if (!(keyPressed&Bit0)) {Row2pressed=true;}; // [']
-        //if (!(keyPressed&Bit1)) {Row2pressed=true;}; // [&] 
-        //if (!(keyPressed&Bit2)) {Row2pressed=true;}; // [,]
-        //if (!(keyPressed&Bit3)) {Row2pressed=true;}; // [.] 
-        //if (!(keyPressed&Bit4)) {Row2pressed=true;}; // [/]
-        //if (!(keyPressed&Bit5)) {Row2pressed=true;}; // [Dead key]
-        //if (!(keyPressed&Bit6)) {Row2pressed=true;}; // [A]
-        //if (!(keyPressed&Bit7)) {Row2pressed=true;}; // [B]
+        //if (!(keyPressed&Bit0)) {Row2pressed=true;} //[']
+        //if (!(keyPressed&Bit1)) {Row2pressed=true;} //[&] 
+        //if (!(keyPressed&Bit2)) {Row2pressed=true;} //[,]
+        //if (!(keyPressed&Bit3)) {Row2pressed=true;} //[.] 
+        //if (!(keyPressed&Bit4)) {Row2pressed=true;} //[/]
+        //if (!(keyPressed&Bit5)) {Row2pressed=true;} //[Dead key]
+        //if (!(keyPressed&Bit6)) {Row2pressed=true;} //[A]
+        //if (!(keyPressed&Bit7)) {Row2pressed=true;} //[B]
       }      
     }else Row2pressed=false;
     
@@ -254,14 +288,14 @@ void main(void)
     {
       if(Row3pressed==false)
       {
-        //if (!(keyPressed&Bit0)) {Row3pressed=true;}; // [C]
-        //if (!(keyPressed&Bit1)) {Row3pressed=true;}; // [D]
-        //if (!(keyPressed&Bit2)) {Row3pressed=true;}; // [E]
-        //if (!(keyPressed&Bit3)) {Row3pressed=true;}; // [F]
-        //if (!(keyPressed&Bit4)) {Row3pressed=true;}; // [G]
-        //if (!(keyPressed&Bit5)) {Row3pressed=true;}; // [H]
-        //if (!(keyPressed&Bit6)) {Row3pressed=true;}; // [I]
-        //if (!(keyPressed&Bit7)) {Row3pressed=true;}; // [J]
+        //if (!(keyPressed&Bit0)) {Row3pressed=true;} //[C]
+        //if (!(keyPressed&Bit1)) {Row3pressed=true;} //[D]
+        //if (!(keyPressed&Bit2)) {Row3pressed=true;} //[E]
+        //if (!(keyPressed&Bit3)) {Row3pressed=true;} //[F]
+        //if (!(keyPressed&Bit4)) {Row3pressed=true;} //[G]
+        //if (!(keyPressed&Bit5)) {Row3pressed=true;} //[H]
+        //if (!(keyPressed&Bit6)) {Row3pressed=true;} //[I]
+        //if (!(keyPressed&Bit7)) {Row3pressed=true;} //[J]
       }      
     }else Row3pressed=false;
     
@@ -272,14 +306,14 @@ void main(void)
     {
       if(Row4pressed==false)
       {
-        //if (!(keyPressed&Bit0)) {Row4pressed=true;}; // [K]
-        //if (!(keyPressed&Bit1)) {Row4pressed=true;}; // [L]
-        //if (!(keyPressed&Bit2)) {Row4pressed=true;}; // [M]
-        //if (!(keyPressed&Bit3)) {Row4pressed=true;}; // [N]
-        //if (!(keyPressed&Bit4)) {Row4pressed=true;}; // [O]
-        //if (!(keyPressed&Bit5)) {Row4pressed=true;}; // [P]
-        //if (!(keyPressed&Bit6)) {Row4pressed=true;}; // [Q]
-        //if (!(keyPressed&Bit7)) {Row4pressed=true;}; // [R]
+        //if (!(keyPressed&Bit0)) {Row4pressed=true;} //[K]
+        //if (!(keyPressed&Bit1)) {Row4pressed=true;} //[L]
+        //if (!(keyPressed&Bit2)) {Row4pressed=true;} //[M]
+        //if (!(keyPressed&Bit3)) {Row4pressed=true;} //[N]
+        //if (!(keyPressed&Bit4)) {Row4pressed=true;} //[O]
+        //if (!(keyPressed&Bit5)) {Row4pressed=true;} //[P]
+        //if (!(keyPressed&Bit6)) {Row4pressed=true;} //[Q]
+        //if (!(keyPressed&Bit7)) {Row4pressed=true;} //[R]
       }      
     }else Row4pressed=false;    
    
@@ -291,14 +325,14 @@ void main(void)
     {
       if(Row5pressed==false)
       {
-        //if (!(keyPressed&Bit0)) {Row5pressed=true;}; // [S]
-        //if (!(keyPressed&Bit1)) {Row5pressed=true;}; // [T]
-        //if (!(keyPressed&Bit2)) {Row5pressed=true;}; // [U]
-        //if (!(keyPressed&Bit3)) {Row5pressed=true;}; // [V]
-        //if (!(keyPressed&Bit4)) {Row5pressed=true;}; // [W]
-        //if (!(keyPressed&Bit5)) {Row5pressed=true;}; // [X]
-        //if (!(keyPressed&Bit6)) {Row5pressed=true;}; // [Y]
-        //if (!(keyPressed&Bit7)) {Row5pressed=true;}; // [Z]
+        //if (!(keyPressed&Bit0)) {Row5pressed=true;} //[S]
+        //if (!(keyPressed&Bit1)) {Row5pressed=true;} //[T]
+        //if (!(keyPressed&Bit2)) {Row5pressed=true;} //[U]
+        //if (!(keyPressed&Bit3)) {Row5pressed=true;} //[V]
+        //if (!(keyPressed&Bit4)) {Row5pressed=true;} //[W]
+        //if (!(keyPressed&Bit5)) {Row5pressed=true;} //[X]
+        //if (!(keyPressed&Bit6)) {Row5pressed=true;} //[Y]
+        //if (!(keyPressed&Bit7)) {Row5pressed=true;} //[Z]
       }      
     }else Row5pressed=false;
     
@@ -309,14 +343,14 @@ void main(void)
     {
       if(Row6pressed==false)
       {
-        //if (!(keyPressed&Bit0)) {Row6pressed=true;}; // [SHIFT]
-        //if (!(keyPressed&Bit1)) {Row6pressed=true;}; // [CTRL]
-        //if (!(keyPressed&Bit2)) {Row6pressed=true;}; // [GRAPH]
-        //if (!(keyPressed&Bit3)) {Row6pressed=true;}; // [CAPS]
-        //if (!(keyPressed&Bit4)) {Row6pressed=true;}; // [CODE]
-        //if (!(keyPressed&Bit5)) {Row6pressed=true;}; // [F1]
-        //if (!(keyPressed&Bit6)) {Row6pressed=true;}; // [F2]
-        //if (!(keyPressed&Bit7)) {Row6pressed=true;}; // [F3]
+        //if (!(keyPressed&Bit0)) {Row6pressed=true;} //[SHIFT]
+        //if (!(keyPressed&Bit1)) {Row6pressed=true;} //[CTRL]
+        //if (!(keyPressed&Bit2)) {Row6pressed=true;} //[GRAPH]
+        //if (!(keyPressed&Bit3)) {Row6pressed=true;} //[CAPS]
+        //if (!(keyPressed&Bit4)) {Row6pressed=true;} //[CODE]
+        //if (!(keyPressed&Bit5)) {Row6pressed=true;} //[F1]
+        //if (!(keyPressed&Bit6)) {Row6pressed=true;} //[F2]
+        //if (!(keyPressed&Bit7)) {Row6pressed=true;} //[F3]
       }      
     }else Row6pressed=false;
     
@@ -327,14 +361,14 @@ void main(void)
     {
       if(Row7pressed==false)
       {
-        //if (!(keyPressed&Bit0)) {Row7pressed=true;}; // [F4]
-        //if (!(keyPressed&Bit1)) {Row7pressed=true;}; // [F5]
-        //if (!(keyPressed&Bit2)) {Row7pressed=true;}; // [ESC]
-        //if (!(keyPressed&Bit3)) {Row7pressed=true;}; // [TAB]
-        //if (!(keyPressed&Bit4)) {Row7pressed=true;}; // [STOP]
-        //if (!(keyPressed&Bit5)) {Row7pressed=true;}; // [BS]
-        //if (!(keyPressed&Bit6)) {Row7pressed=true;}; // [SELECT]
-        //if (!(keyPressed&Bit7)) {Row7pressed=true;}; // [RETURN]
+        //if (!(keyPressed&Bit0)) {Row7pressed=true;} //[F4]
+        //if (!(keyPressed&Bit1)) {Row7pressed=true;} //[F5]
+        //if (!(keyPressed&Bit2)) {Row7pressed=true;} //[ESC]
+        //if (!(keyPressed&Bit3)) {Row7pressed=true;} //[TAB]
+        //if (!(keyPressed&Bit4)) {Row7pressed=true;} //[STOP]
+        //if (!(keyPressed&Bit5)) {Row7pressed=true;} //[BS]
+        //if (!(keyPressed&Bit6)) {Row7pressed=true;} //[SELECT]
+        //if (!(keyPressed&Bit7)) {Row7pressed=true;} //[RETURN]
       }      
     }else Row7pressed=false;
     
@@ -345,17 +379,16 @@ void main(void)
     {
       if(Row8pressed==false)
       {
-        //if (!(keyPressed&Bit0)) {Row8pressed=true;}; // [SPACE]
-        //if (!(keyPressed&Bit1)) {Row8pressed=true;}; // [HOME]
-        //if (!(keyPressed&Bit2)) {Row8pressed=true;}; // [INS]
-        //if (!(keyPressed&Bit3)) {Row8pressed=true;}; // [DEL]
-        //if (!(keyPressed&Bit4)) {Row8pressed=true;}; // [LEFT]
-        //if (!(keyPressed&Bit5)) {Row8pressed=true;}; // [UP]
-        //if (!(keyPressed&Bit6)) {Row8pressed=true;}; // [DOWN]
-        //if (!(keyPressed&Bit7)) {Row8pressed=true;}; // [RIGHT]
+        //if (!(keyPressed&Bit0)) {Row8pressed=true;} //[SPACE]
+        //if (!(keyPressed&Bit1)) {Row8pressed=true;} //[HOME]
+        //if (!(keyPressed&Bit2)) {Row8pressed=true;} //[INS]
+        //if (!(keyPressed&Bit3)) {Row8pressed=true;} //[DEL]
+        //if (!(keyPressed&Bit4)) {Row8pressed=true;} //[LEFT]
+        //if (!(keyPressed&Bit5)) {Row8pressed=true;} //[UP]
+        //if (!(keyPressed&Bit6)) {Row8pressed=true;} //[DOWN]
+        //if (!(keyPressed&Bit7)) {Row8pressed=true;} //[RIGHT]
       }      
     }else Row8pressed=false;
-
 
 
   } //END while
@@ -388,6 +421,7 @@ Row  7      6      5      4      3      2      1      0    <-- bit
   8  Right  Down   Up     Left   DEL    INS    HOME   SPACE
 ```
 
+<br/> 
 
 #### 6.1.2 Numeric pad
 
@@ -403,8 +437,10 @@ Row  7      6      5      4      3      2      1      0    <-- bit
 ---
 
 ## 7 References
-  
+
 - MSX Assembly Page - [Keyboard matrices](http://map.grauw.nl/articles/keymatrix.php)
+- [MSX2 Technical Handbook](https://konamiman.github.io/MSX2-Technical-Handbook/) - [Chapter 5 Access to peripherals through bios](https://konamiman.github.io/MSX2-Technical-Handbook/md/Chapter5a.html) - [3. Keyboard Interface](https://konamiman.github.io/MSX2-Technical-Handbook/md/Chapter5a.html#3-keyboard-interface)
+- MSX Resource Center - [Wiki](https://www.msx.org/wiki/) - [Keyboard Matrices ](https://www.msx.org/wiki/Keyboard_Matrices)
 
 <br/>
 
