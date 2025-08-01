@@ -1,29 +1,32 @@
 # Keyboard MSX SDCC Library (fR3eL Project)
 
 <table>
+<tr><td rowspan=2>Name</td><td>keyboard_MSXBIOS</td></tr>
+<tr><td>keyboard_MSXDOS</td></tr>
 <tr><td>Architecture</td><td>MSX</td></tr>
-<tr><td>Format</td><td>C Object (SDCC .rel)</td></tr>
-<tr><td>Programming language</td><td>C and Z80 assembler</td></tr>
-<tr><td>Compiler</td><td>SDCC v4.4 or newer</td></tr>
+<tr><td>Environment</td><td>ROM, MSX BASIC or MSX-DOS</td></tr>
+<tr><td>Format</td><td>SDCC Relocatable object file (.rel)</td></tr>
+<tr><td>Compiler</td><td>SDCC v4.4</td></tr>
+<tr><td>License</td><td><a href="LICENSE">MIT license</a></td></tr>
 </table>
 
 ---
 
 ## Description
 
-Library with basic functions for reading the keyboard of MSX computers.
+C function library with basic functions for reading the keyboard of MSX computers.
 
 In this project you will find two libraries for different environments:
 - **keyboard_MSXBIOS** Uses the MSX BIOS. It takes up very little memory. You can use it to develop applications in ROM format or programs that run from MSX BASIC environment.
 - **keyboard_MSXDOS** Uses the MSX BIOS functions via inter-slot call (CALSLT). You can use it to develop applications for the MSX-DOS environment.
   
-These libraries are part of the [MSX fR3eL Project](https://github.com/mvac7/SDCC_MSX_fR3eL).
-
 You can access the documentation here with [`How to use the library`](docs/HOWTO.md).
 
-Use them for developing MSX applications using Small Device C Compiler [`SDCC`](http://sdcc.sourceforge.net/).
+You can use these libraries to develop applications for ROM, MSXBASIC or MSX-DOS environments, using the Small Device C Compiler [(SDCC)](http://sdcc.sourceforge.net/) cross compiler.
 
-This project is an Open Source. 
+These libraries are part of the [MSX fR3eL Project](https://github.com/mvac7/SDCC_MSX_fR3eL).
+
+This project is open source under the [MIT license](LICENSE).
 You can add part or all of this code in your application development or include it in other libraries/engines.
 
 Enjoy it!
